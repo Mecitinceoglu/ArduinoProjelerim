@@ -1,0 +1,53 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+int pot=A0;//Potanalog giriş tanımlaması
+int potdeger;//Pot değerinin yazılacağı değişken
+int L1=3;//Led pin tanımlaması
+int button=2;//buton pin tamımlaması
+int buttondeger;//buton değerinin tanımlanacağı değişken
+int L2=5;//led pin tanımalaması
+int ilerideger;//ileri değerinin oranlanması için gereken değişken
+int gerideger;//geri değerinin oranlanması için gerekli değişken
+int gerifark;/oranın ters yönde ayarlanması için gerekli değişken
+void setup(){
+  pinMode(button,INPUT);//buton pin ayarlama
+  pinMode(L1,OUTPUT);//led pin ayarlama
+  pinMode(L2,OUTPUT);//led pin ayarlama
+  pinMode(pot,INPUT);//pot pin ayarlama
+  lcd.begin(16, 2);//LCD satır sütun ayarlama 
+}
+
+void loop(){
+lcd.clear();//LCD temizle 
+  potdeger=0;//pot değerini sıfırla
+ potdeger=analogRead(pot);//pot değerini pot değer değişkenine ata 
+ 
+  if(potdeger <475){ //eğer pot değeri 475 den küçükse aşağıdakiler yap
+    gerideger=(100 - (potdeger*0.196));//gerideğerini ters oranla
+    lcd.setCursor(0, 1); //%nin yazılacağı lcd segmentini setle
+    lcd.print("%"); //% yazdır
+    lcd.setCursor(2, 1);//oranın yazdırılacağı segmenti setle
+    lcd.print(gerifdeger);//oranı yazdır
+    lcd.setCursor(0, 0);//geri nin yazılacağı segmenti setle
+    lcd.print("Geri   ");//geriyi yazdır
+    
+  }
+
+  else if(potdeger >525){//eger pot değeri 525 den büyükse aşağıdakileri yap
+    ilerideger=((potdeger*0.196)-100); //ileri degerini doğru oranla
+    lcd.setCursor(0, 1);//% segmentini setle
+    lcd.print("%");// % yazdır
+    lcd.setCursor(2, 1);// ileri değerinin segmentini setle
+    lcd.print(ilerideger);ileri degerini yazdır
+    lcd.setCursor(0, 0);//ileri segmentini setle
+    lcd.print("Ileri   ");//ileri yazdır
+    
+  }
+  else{ //yukarıdakilerin hiçbiri değilse 
+  lcd.setCursor(0, 0);//yazılacak segmenti setle
+  lcd.print("Duruyor");//duruyor yazdır
+ }  
+
+  delay(100);//100 ms gecikme
+  
+}
